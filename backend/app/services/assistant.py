@@ -1,14 +1,20 @@
 import os
 import logging
 from typing import List, Dict, Any, Optional
+from pathlib import Path
 from groq import Groq
 from dotenv import load_dotenv
 
-load_dotenv()
+# Search for .env in current directory and backend directory
+env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+if env_path.exists():
+    load_dotenv(dotenv_path=env_path)
+else:
+    load_dotenv()
 
 logger = logging.getLogger("satark.assistant")
 
-SYSTEM_PROMPT = """You are the SATARK 2.0 Cybercrime & Cybersecurity Analytics Assistant.
+SYSTEM_PROMPT = """You are CyberGuard, the SATARK 2.0 Cybercrime & Threat Intelligence Assistant.
 
 SCOPE & EXPERTISE:
 1. SATARK 2.0: CatBoost forecasting, risk classification (Low/Medium/High), district crime profiles, and evaluation methodology.
@@ -17,12 +23,12 @@ SCOPE & EXPERTISE:
 4. Indian cyber laws & policing: Information Technology Act, 2000 (Sections 43, 66, 66C, 66D, 66E, 66F, 67, 67A, 67B) and relevant IPC provisions.
 
 GREETINGS:
-- Respond politely and concisely to greetings (e.g., "hi", "hello", "who are you?", "help"). State your purpose as the SATARK Cybercrime & Cybersecurity Assistant.
+- Respond politely and concisely to greetings (e.g., "hi", "hello", "who are you?", "help"). State your purpose as CyberGuard, the SATARK Cybercrime & Threat Intelligence Assistant.
 
 TOPIC RESTRICTION:
 - Strictly restricted to cybercrime, cybersecurity, SATARK forecasting, risk evaluation, and cyber laws.
 - For completely unrelated topics (cooking, movies, sports, generic coding unrelated to cybersecurity), politely refuse:
-"I am the SATARK Assistant, specialized in cybercrime analytics, cybersecurity defense, and Indian cyber law. Please ask a question related to cybercrime trends, risk assessment, or cybersecurity."
+"I am CyberGuard, specialized in cybercrime analytics, cybersecurity defense, and Indian cyber law. Please ask a question related to cybercrime trends, risk assessment, or cybersecurity."
 
 MANDATORY OUTPUT CONSTRAINTS:
 1. LENGTH LIMIT: Your total response MUST be strictly under 300 words. Keep answers focused, precise, and practical.
@@ -31,19 +37,19 @@ MANDATORY OUTPUT CONSTRAINTS:
 """
 
 FALLBACK_MODELS = [
-    "openai/gpt-oss-120b",
     "qwen/qwen3.8-27b",
-    "allam-2-7b",
-    "openai/gpt-oss-20b"
+    "openai/gpt-oss-120b",
+    "openai/gpt-oss-20b",
+    "allam-2-7b"
 ]
 
 class AIAssistantService:
     def __init__(self):
         self.api_key = os.getenv("GROQ_API_KEY")
         self.client = None
-        if self.api_key:
+        if self.api_key and self.api_key.strip():
             try:
-                self.client = Groq(api_key=self.api_key)
+                self.client = Groq(api_key=self.api_key.strip())
             except Exception as e:
                 logger.error(f"Error initializing Groq client: {e}")
 
@@ -51,7 +57,6 @@ class AIAssistantService:
         words = text.split()
         if len(words) <= max_words:
             return text
-        # Truncate to max_words and ensure clean sentence ending
         truncated = " ".join(words[:max_words])
         if not truncated.endswith(('.', '!', '?')):
             last_period = max(truncated.rfind('.'), truncated.rfind('!'), truncated.rfind('?'))
@@ -66,9 +71,18 @@ class AIAssistantService:
         messages: List[Dict[str, str]],
         context: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-        if not self.client:
+        # Always reload api key from environment if not yet initialized or changed
+        current_key = (os.getenv("GROQ_API_KEY") or "").strip()
+        if current_key and (not self.client or self.api_key != current_key):
+            self.api_key = current_key
+            try:
+                self.client = Groq(api_key=self.api_key)
+            except Exception as e:
+                logger.error(f"Failed to reinit Groq client: {e}")
+
+        if not self.api_key or not self.client:
             return {
-                "reply": "Groq API client is not configured. Please ensure GROQ_API_KEY is set.",
+                "reply": "Groq API Key is not configured. Please set the GROQ_API_KEY environment variable in your .env or cloud environment settings (AWS ECS/Elastic Beanstalk/Secrets Manager).",
                 "model_used": "none",
                 "status": "error"
             }
@@ -96,9 +110,13 @@ class AIAssistantService:
                     model=model_name,
                     messages=chat_messages,
                     temperature=0.3,
-                    max_tokens=450
+                    max_tokens=650
                 )
-                reply = response.choices[0].message.content
+                msg_obj = response.choices[0].message
+                reply = msg_obj.content
+                if not reply and getattr(msg_obj, 'reasoning', None):
+                    reply = msg_obj.reasoning
+                
                 if reply and reply.strip():
                     cleaned_reply = self._enforce_word_limit(reply.strip(), max_words=300)
                     return {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, TrendingUp, AlertTriangle } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import INDIA_MAP_DATA from '../data/indiaMapData';
 
 // Normalization helper to map any naming variation between dataset and cartography
@@ -38,7 +38,6 @@ export default function IndiaMap({ stateBreakdown = [], onSelectState }) {
       return '#f1f5f9'; // Clean light slate for states with no predictions
     }
     
-    // Distinct Red, Yellow, Green color encoding based on risk threshold
     const burden = data.avg_burden;
     if (burden >= 33.0) {
       return '#f87171'; // High Risk (Red)
@@ -64,7 +63,7 @@ export default function IndiaMap({ stateBreakdown = [], onSelectState }) {
     <div className="relative w-full h-full flex items-center justify-center p-2 select-none">
       <svg
         viewBox={INDIA_MAP_DATA.viewBox || '0 0 612 696'}
-        className="w-full h-full max-h-[300px] drop-shadow-xs"
+        className="w-full h-full max-h-[310px] drop-shadow-xs"
       >
         <g>
           {INDIA_MAP_DATA.locations.map((state) => {
@@ -76,7 +75,7 @@ export default function IndiaMap({ stateBreakdown = [], onSelectState }) {
                 key={state.id}
                 d={state.path}
                 fill={fill}
-                stroke={isHovered ? '#0f172a' : '#94a3b8'}
+                stroke={isHovered ? '#1e3a8a' : '#cbd5e1'}
                 strokeWidth={isHovered ? '2' : '0.75'}
                 strokeLinejoin="round"
                 className="transition-all duration-150 cursor-pointer hover:opacity-90"
@@ -94,29 +93,29 @@ export default function IndiaMap({ stateBreakdown = [], onSelectState }) {
       {hoveredState && (
         <div
           style={{
-            left: Math.min(Math.max(tooltipPos.x + 12, 10), 270),
+            left: Math.min(Math.max(tooltipPos.x + 12, 10), 280),
             top: Math.max(10, tooltipPos.y - 45)
           }}
-          className="absolute z-20 pointer-events-none bg-white border border-slate-200 rounded-lg p-2.5 shadow-lg text-xs animate-in fade-in zoom-in-95 duration-100 min-w-[160px]"
+          className="absolute z-20 pointer-events-none bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-xl p-3 shadow-xl text-xs animate-in fade-in zoom-in-95 duration-100 min-w-[170px]"
         >
-          <div className="flex items-center gap-1.5 font-semibold text-slate-900 mb-1 border-b border-slate-100 pb-1">
-            <MapPin className="w-3 h-3 text-slate-500" />
+          <div className="flex items-center gap-1.5 font-bold text-slate-900 mb-1.5 border-b border-slate-100 pb-1">
+            <MapPin className="w-3.5 h-3.5 text-blue-600" />
             <span>{hoveredState.name}</span>
           </div>
 
           {hoveredData ? (
-            <div className="space-y-1 text-[11px] text-slate-600">
+            <div className="space-y-1.5 text-[11px] text-slate-600">
               <div className="flex justify-between">
                 <span>Districts Evaluated:</span>
-                <strong className="text-slate-900 font-mono">{hoveredData.predictions_count}</strong>
+                <strong className="text-slate-900 font-sans">{hoveredData.predictions_count}</strong>
               </div>
               <div className="flex justify-between">
                 <span>Avg Predicted Burden:</span>
-                <strong className="text-slate-900 font-mono">{hoveredData.avg_burden}</strong>
+                <strong className="text-slate-900 font-sans">{hoveredData.avg_burden}</strong>
               </div>
-              <div className="flex justify-between items-center pt-0.5">
+              <div className="flex justify-between items-center pt-1 border-t border-slate-100">
                 <span>Risk Status:</span>
-                <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
+                <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
                   hoveredData.avg_burden >= 33.0 
                     ? 'bg-rose-100 text-rose-800 border border-rose-200' 
                     : hoveredData.avg_burden >= 10.0 
@@ -139,21 +138,21 @@ export default function IndiaMap({ stateBreakdown = [], onSelectState }) {
         </div>
       )}
 
-      {/* Red, Yellow, Green Minimal Legend */}
-      <div className="absolute bottom-1 right-2 flex items-center gap-2 bg-white/95 backdrop-blur-xs px-2.5 py-1.5 rounded-md border border-slate-200 text-[10px] font-medium text-slate-600 shadow-2xs">
-        <div className="flex items-center gap-1">
+      {/* Modern Pill Legend */}
+      <div className="absolute bottom-1 right-2 flex items-center gap-2.5 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-200/80 text-[10px] font-semibold text-slate-600 shadow-xs">
+        <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-[#f87171] inline-block" />
-          <span>High Risk (&gt;33)</span>
+          <span>High (&gt;33)</span>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-[#fbbf24] inline-block" />
           <span>Medium (10–33)</span>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-[#34d399] inline-block" />
           <span>Low (&lt;10)</span>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-[#f1f5f9] border border-slate-300 inline-block" />
           <span>No Data</span>
         </div>

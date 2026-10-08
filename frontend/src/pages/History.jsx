@@ -10,7 +10,8 @@ import {
   MapPin, 
   ShieldAlert, 
   ShieldCheck, 
-  AlertTriangle 
+  AlertTriangle,
+  ChevronDown
 } from 'lucide-react';
 import { predictionAPI } from '../api/client';
 
@@ -91,69 +92,68 @@ export default function History() {
   });
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-7 space-y-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-7">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/60">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
-            Prediction History & Audit Records
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+            Audit Records &amp; History
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Log of previously generated forecasts, model estimates, and risk categories.
+          <p className="text-sm text-slate-500 mt-1">
+            Historical log of district cybercrime forecasts, risk ratings, and model evaluations.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={fetchHistory}
             title="Refresh"
-            className="p-2 rounded-lg bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 shadow-sm transition-colors"
+            className="p-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-600 border border-slate-200/80 shadow-xs transition-colors"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-slate-900' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-blue-600' : ''}`} />
           </button>
 
           <button
             onClick={exportCSV}
             disabled={filteredPredictions.length === 0}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-medium shadow-sm transition-colors disabled:opacity-40"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 text-sm font-bold shadow-xs transition-all disabled:opacity-40"
           >
-            <Download className="w-3.5 h-3.5 text-slate-500" />
+            <Download className="w-4 h-4 text-slate-500" />
             <span>Export CSV</span>
           </button>
 
           <button
             onClick={() => navigate('/predict')}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs shadow-sm transition-colors"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-500/20 transition-all"
           >
-            <Compass className="w-3.5 h-3.5" />
+            <Compass className="w-4 h-4" />
             <span>New Forecast</span>
           </button>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="clean-card rounded-xl p-3.5 bg-white flex flex-col md:flex-row gap-3 items-center justify-between">
+      <div className="satark-card p-4 bg-white flex flex-col md:flex-row gap-3.5 items-center justify-between">
         {/* Search */}
-        <div className="relative w-full md:w-72">
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />
+        <div className="relative w-full md:w-88">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5 pointer-events-none" />
           <input
             type="text"
             placeholder="Search district or state..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg clean-input"
+            className="w-full pl-10 pr-3 py-2.5 text-sm rounded-xl satark-input font-medium"
           />
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
           {/* State Filter */}
-          <div className="flex items-center gap-1.5 text-xs text-slate-600">
-            <MapPin className="w-3.5 h-3.5 text-slate-400" />
+          <div className="relative">
             <select
               value={selectedState}
               onChange={(e) => setSelectedState(e.target.value)}
-              className="clean-input rounded-lg px-2.5 py-1.5 text-xs"
+              className="satark-input rounded-xl pl-3.5 pr-9 py-2.5 text-sm font-semibold appearance-none bg-white cursor-pointer text-slate-700"
             >
               {uniqueStates.map((st) => (
                 <option key={st} value={st}>
@@ -161,75 +161,76 @@ export default function History() {
                 </option>
               ))}
             </select>
+            <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-3.5 pointer-events-none" />
           </div>
 
           {/* Risk Filter */}
-          <div className="flex items-center gap-1.5 text-xs text-slate-600">
-            <Filter className="w-3.5 h-3.5 text-slate-400" />
+          <div className="relative">
             <select
               value={selectedRisk}
               onChange={(e) => setSelectedRisk(e.target.value)}
-              className="clean-input rounded-lg px-2.5 py-1.5 text-xs"
+              className="satark-input rounded-xl pl-3.5 pr-9 py-2.5 text-sm font-semibold appearance-none bg-white cursor-pointer text-slate-700"
             >
               <option value="ALL">All Risk Tiers</option>
               <option value="High">High Risk</option>
               <option value="Medium">Medium Risk</option>
               <option value="Low">Low Risk</option>
             </select>
+            <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-3.5 pointer-events-none" />
           </div>
         </div>
       </div>
 
       {/* Table Card */}
-      <div className="clean-card rounded-xl overflow-hidden bg-white">
+      <div className="satark-card overflow-hidden bg-white">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50/80 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-semibold text-[10px]">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-slate-50/80 border-b border-slate-100 text-slate-500 uppercase tracking-wider font-bold text-xs">
               <tr>
-                <th className="py-3 px-5">State</th>
-                <th className="py-3 px-5">District</th>
-                <th className="py-3 px-4 text-center">Baseline Year</th>
-                <th className="py-3 px-4 text-center">Forecast Year</th>
-                <th className="py-3 px-5 text-right">Predicted Total</th>
-                <th className="py-3 px-5 text-center">Risk Level</th>
-                <th className="py-3 px-4 text-center">Action</th>
+                <th className="py-4 px-6">State</th>
+                <th className="py-4 px-6">District</th>
+                <th className="py-4 px-4 text-center">Baseline Year</th>
+                <th className="py-4 px-4 text-center">Forecast Year</th>
+                <th className="py-4 px-6 text-right">Predicted Volume</th>
+                <th className="py-4 px-6 text-center">Risk Tier</th>
+                <th className="py-4 px-4 text-center">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-slate-700">
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="py-10 text-center text-slate-400">
-                    <div className="inline-flex items-center gap-2">
-                      <div className="w-3.5 h-3.5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin" />
-                      <span>Loading records...</span>
+                  <td colSpan={7} className="py-14 text-center text-slate-400">
+                    <div className="inline-flex items-center gap-2.5">
+                      <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                      <span className="font-medium">Loading records...</span>
                     </div>
                   </td>
                 </tr>
               ) : filteredPredictions.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-10 text-center text-slate-400 text-xs">
+                  <td colSpan={7} className="py-14 text-center text-slate-400 text-sm">
                     No prediction records found matching filters.
                   </td>
                 </tr>
               ) : (
                 filteredPredictions.map((row) => (
-                  <tr key={row.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-3 px-5 font-medium text-slate-900">{row.state}</td>
-                    <td className="py-3 px-5 font-semibold text-slate-900">
+                  <tr key={row.id} className="hover:bg-blue-50/40 transition-colors">
+                    <td className="py-4 px-6 font-medium text-slate-900">{row.state}</td>
+                    <td className="py-4 px-6 font-bold text-slate-900">
                       {row.district}
                     </td>
-                    <td className="py-3 px-4 text-center text-slate-500 font-mono">
+                    <td className="py-4 px-4 text-center text-slate-500 font-sans">
                       {row.input_year}
                     </td>
-                    <td className="py-3 px-4 text-center font-mono font-semibold text-slate-900">
+                    <td className="py-4 px-4 text-center font-bold text-slate-900 font-sans">
                       {row.forecast_year}
                     </td>
-                    <td className="py-3 px-5 text-right font-mono font-bold text-slate-900">
+                    <td className="py-4 px-6 text-right font-extrabold text-slate-900 font-sans">
                       {row.predicted_total}
                     </td>
-                    <td className="py-3 px-5 text-center">
+                    <td className="py-4 px-6 text-center">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold ${
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold ${
                           row.risk_level === 'High'
                             ? 'bg-rose-50 text-rose-700 border border-rose-200'
                             : row.risk_level === 'Medium'
@@ -237,20 +238,20 @@ export default function History() {
                             : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                         }`}
                       >
-                        {row.risk_level === 'High' && <ShieldAlert className="w-3 h-3 text-rose-600" />}
-                        {row.risk_level === 'Medium' && <AlertTriangle className="w-3 h-3 text-amber-600" />}
-                        {row.risk_level === 'Low' && <ShieldCheck className="w-3 h-3 text-emerald-600" />}
+                        {row.risk_level === 'High' && <ShieldAlert className="w-3.5 h-3.5 text-rose-600" />}
+                        {row.risk_level === 'Medium' && <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />}
+                        {row.risk_level === 'Low' && <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />}
                         <span>{row.risk_level}</span>
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-center">
+                    <td className="py-4 px-4 text-center">
                       <button
                         onClick={() => handleDelete(row.id)}
                         disabled={deletingId === row.id}
-                        title="Delete entry"
-                        className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors disabled:opacity-30"
+                        title="Delete record"
+                        className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors disabled:opacity-30"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </td>
                   </tr>

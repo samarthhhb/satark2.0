@@ -8,16 +8,23 @@
 
 body {
   margin: 0;
-  background-color: #f8fafc;
+  background-color: #f6f8fc;
   color: #0f172a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(219, 234, 254, 0.45) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(224, 242, 254, 0.4) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(239, 246, 255, 0.6) 0px, transparent 60%);
+  background-attachment: fixed;
+  background-size: cover;
+  min-height: 100vh;
 }
 
 /* Minimal subtle scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -26,42 +33,71 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 3px;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
 
-/* Clean minimal card & surface helpers */
-.clean-card {
+/* Theme card styling matching modern SaaS & presentation template */
+.satark-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid #edf2f7;
+  border-radius: 1.25rem;
+  box-shadow: 0 2px 14px -2px rgba(15, 23, 42, 0.035), 0 1px 3px -1px rgba(15, 23, 42, 0.02);
 }
 
-.clean-card-hover {
+.satark-card-interactive {
   background: #ffffff;
+  border: 1px solid #edf2f7;
+  border-radius: 1.25rem;
+  box-shadow: 0 2px 14px -2px rgba(15, 23, 42, 0.035), 0 1px 3px -1px rgba(15, 23, 42, 0.02);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.satark-card-interactive:hover {
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.07), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+}
+
+/* Glassmorphic surface */
+.satark-glass {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+/* Modern input styling */
+.satark-input {
+  background-color: #ffffff;
   border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.03);
+  color: #0f172a;
+  border-radius: 0.75rem;
   transition: all 0.15s ease-in-out;
 }
 
-.clean-card-hover:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
-}
-
-/* Minimal input styling */
-.clean-input {
-  background-color: #ffffff;
-  border: 1px solid #cbd5e1;
-  color: #0f172a;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.clean-input:focus {
+.satark-input:focus {
   outline: none;
-  border-color: #0f172a;
-  box-shadow: 0 0 0 1px #0f172a;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Floating Presentation Template Cross / Plus Accents */
+.theme-plus-accent {
+  position: relative;
+  user-select: none;
+  pointer-events: none;
+}
+
+.theme-plus-accent::before {
+  content: "+";
+  position: absolute;
+  font-weight: 300;
+  font-family: 'Inter', sans-serif;
+  color: rgba(147, 197, 253, 0.35);
+  font-size: 2.25rem;
+  line-height: 1;
 }
