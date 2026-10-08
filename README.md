@@ -142,6 +142,22 @@ npm run dev
 
 ---
 
+## Cloud Deployment (AWS EC2 & RDS)
+
+SATARK 2.0 is fully optimized for cloud hosting on **Amazon Web Services (AWS)** using **Ubuntu 22.04 LTS**, **Nginx reverse proxy**, and **Systemd service supervision**.
+
+### 1-Click Cloud Deployment
+Run the automated cloud controller script on your EC2 instance:
+```bash
+chmod +x cloud.sh
+./cloud.sh
+```
+This script automatically configures **2GB Swap Memory Protection**, installs dependencies, compiles the production React build, and activates background services.
+
+> For full AWS infrastructure architecture, security group setup, Let's Encrypt SSL/HTTPS certificates, and AWS RDS PostgreSQL integration, see **[docs/cloud_deployment.md](docs/cloud_deployment.md)**.
+
+---
+
 ## About Us & Development Team
 
 Developed under the **Department of AI and Machine Learning, Symbiosis Institute of Technology (SIT), Pune**.
@@ -154,8 +170,10 @@ Developed under the **Department of AI and Machine Learning, Symbiosis Institute
 
 ---
 
-## Documentation
+## Documentation Index
 
-For further details, refer to the documentation in the `docs/` directory:
-- [docs/outcomes.md](file:///Users/samarth/Documents/Satark%20Model/docs/outcomes.md) — Detailed project motivation, relevance, applications, and scope.
-- [docs/tech_specs.md](file:///Users/samarth/Documents/Satark%20Model/docs/tech_specs.md) — Full technical specifications, ML feature vector definitions, database schema, and deployment guide.
+Comprehensive project documentation is organized in the `docs/` directory:
+- 📖 **[docs/outcomes.md](docs/outcomes.md)** — Project motivation, domain relevance, cybersecurity applications, and executive summary.
+- ⚙️ **[docs/tech_specs.md](docs/tech_specs.md)** — Detailed technical specifications, 31-feature ML vectors, database schemas, and REST API contracts.
+- ☁️ **[docs/cloud_deployment.md](docs/cloud_deployment.md)** — AWS EC2 & RDS deployment architecture, Nginx configurations, Systemd services, and SSL/HTTPS guide.
+
