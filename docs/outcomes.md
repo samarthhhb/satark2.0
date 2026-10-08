@@ -1,53 +1,73 @@
-SATARK 2.0: Cloud-Based Cybercrime Intelligence and Risk Assessment Platform
+# SATARK 2.0: Cloud-Based Cybercrime Intelligence & Risk Assessment
 
-Project Overview
+## Executive Summary
 
-SATARK 2.0 is a cloud-based cybercrime intelligence platform designed to demonstrate how cloud computing can be used to securely store, process, analyze, and deliver cybercrime information through a centralized web application. The project combines cloud infrastructure, cybersecurity, data analytics, and machine learning to create a practical decision-support system for understanding regional cybercrime risk.
+**SATARK 2.0** (*System for Advanced Threat Analytics & Regional Cybercrime Knowledge*) is a cloud-hosted predictive intelligence platform designed to transform historical cybercrime records into proactive regional risk assessments across India.
 
-The primary focus of SATARK 2.0 is not simply building a machine learning model, but developing a cloud-hosted system in which data, computing resources, APIs, security mechanisms, and predictive services work together. Historical cybercrime data is stored and processed through the cloud, while users access the system through a web-based interface. The platform can forecast the expected cybercrime burden for a district in the following year and classify the region as Low, Medium, or High risk.
+Rather than merely summarizing past offenses retrospectively, SATARK 2.0 evaluates multi-dimensional district profiles to forecast next-year crime burdens and categorize administrative districts into standardized risk tiers (**Low**, **Medium**, and **High**).
 
-Relevance to Cloud Computing
+---
 
-Modern cybersecurity systems often need to handle large datasets, multiple users, secure data access, and continuously available services. Deploying such systems locally can make data management, accessibility, and scalability more difficult. Cloud computing provides a suitable environment by offering centralized storage, on-demand computing, network-based access, and managed infrastructure.
+## 1. Motivation & Real-World Relevance
 
-SATARK demonstrates these concepts through AWS EC2 for application hosting and computation and AWS RDS PostgreSQL for managed database storage. A React-based frontend communicates with a FastAPI backend through REST APIs. The backend manages authentication, retrieves required data, performs machine learning inference, and stores prediction results.
+Cybercrime incidents in India have expanded dramatically in volume and geographic dispersion, encompassing financial fraud (UPI/OTP scams, banking unauthorized transfers), identity theft, cyber harassment, and ransomware attacks. 
 
-This architecture makes the cloud an essential part of the project rather than simply the location where the final application is hosted.
+Traditional police records and retrospective reports (such as annual NCRB summaries) tell law enforcement and policymakers what happened in previous years, but offer limited forward-looking visibility.
 
-Cybersecurity Component
+### How SATARK 2.0 Bridges the Gap:
+- **Proactive Threat Forecasting**: Shifts policing and cybersecurity strategy from reactive incident investigation to proactive resource pre-allocation.
+- **Micro-Targeted Awareness**: Identifies specific vulnerability patterns (e.g., identity theft clusters vs. digital banking fraud spikes) at the district level.
+- **Standardized Risk Classification**: Supplies administrative leaders with a straightforward 3-tier risk score (Low, Medium, High) for quick operational triage.
 
-Cybersecurity is an important part of the system because the platform handles user accounts and cybercrime-related information. Authentication and authorization mechanisms are incorporated to ensure that only permitted users can access protected services.
+---
 
-User passwords are stored using secure hashing rather than plaintext. JWT-based authentication can be used for API access, while AWS Security Groups restrict unnecessary network exposure. The PostgreSQL database can be configured so that it accepts connections only from the application server. Environment variables are used to keep database credentials and other secrets outside the application source code.
+## 2. Core Technological Pillars
 
-These measures demonstrate how security can be integrated into a cloud application architecture rather than added only after development.
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        SATARK 2.0 ARCHITECTURE                         │
+└──────────────────────────────────┬─────────────────────────────────────┘
+                                   │
+       ┌───────────────────────────┼───────────────────────────┐
+       ▼                           ▼                           ▼
+┌──────────────┐          ┌────────────────┐          ┌─────────────────┐
+│ CLOUD INFRA  │          │ MACHINE LEARN. │          │ CYBERSECURITY   │
+│ AWS EC2 / RDS│          │ CatBoost Model │          │ Threat Intel    │
+│ FastAPI REST │          │ 31-Feature Reg │          │ CyberGuard LLM  │
+│ Scalable DB  │          │ Risk Classifier│          │ Legal Advisory  │
+└──────────────┘          └────────────────┘          └─────────────────┘
+```
 
-Machine Learning and Analytics
+### A. Cloud Architecture & Infrastructure
+Modern cyber threat analytics requires elastic compute, centralized data persistence, and high-availability REST APIs.
+- **Application Tier**: FastAPI (Python 3.10+) running on asynchronous ASGI Uvicorn workers.
+- **Persistence Tier**: Relational storage (AWS RDS PostgreSQL in production / local SQLite for development) managed via SQLAlchemy ORM.
+- **Client Tier**: Single-Page Application (SPA) built with React 18, Vite, and Tailwind CSS.
 
-Machine learning acts as the intelligence layer of SATARK 2.0. Historical cybercrime records are cleaned and aggregated at the State–District–Year level. A CatBoost regression model uses the current-year crime profile to estimate the following year’s total cybercrime burden. A separate classification model categorizes the predicted regional risk into Low, Medium, or High.
+### B. Machine Learning Engine
+- **CatBoost Regression**: Ingests 31 official crime indicators from district profiles and estimates expected next-year cybercrime incident volumes. Uses a `log1p`/`expm1` target transformation to preserve numerical stability on skewed count distributions.
+- **CatBoost Risk Classifier**: Categorizes the district into **Low**, **Medium**, or **High** risk tiers based on predictive multi-feature interactions.
 
-The predictions are delivered through the cloud backend and presented through the web dashboard. This allows the ML model to function as a service within a larger cloud-based application.
+### C. CyberGuard Threat Intelligence Assistant
+- An integrated natural language AI assistant powered by Groq's high-speed inference engine.
+- Specifically guardrailed to answer queries on Indian cyber laws (**Information Technology Act, 2000**), district risk mitigation strategies, and cybersecurity defensive standards.
 
-Applications
+---
 
-SATARK 2.0 has potential applications in several areas.
+## 3. Practical Applications
 
-Law-enforcement agencies can use regional risk information to support resource planning, preventive campaigns, and cybersecurity awareness programs.
+| Stakeholder | Key Benefit & Application |
+| :--- | :--- |
+| **Law Enforcement & Cyber Cells** | Strategic allocation of specialized forensic tools, personnel deployment, and targeted cyber patrol scheduling based on forecasted risk tiers. |
+| **State Cyber Crime Coordination Centers (I4C)** | Prioritizing regional public awareness campaigns (e.g., intensive OTP/banking fraud awareness in vulnerable districts). |
+| **Banking & Financial Institutions** | Regional risk assessments for financial fraud monitoring and fraud-prevention advisory campaigns. |
+| **Academic & Policy Researchers** | Open, reproducible testbed demonstrating end-to-end integration of cloud infrastructure, data pipelines, and machine learning models. |
 
-Government departments can use cloud-based dashboards to examine regional trends and identify areas that may require additional digital-safety initiatives.
+---
 
-Cybersecurity organizations can use regional risk indicators as an additional source of intelligence when planning monitoring and awareness activities.
+## 4. Scalability & Future Roadmap
 
-Educational and research institutions can use the project as a practical case study covering cloud architecture, cybersecurity, APIs, databases, predictive analytics, and secure application deployment.
-
-Scope
-
-The initial implementation focuses on a simple and manageable cloud architecture consisting of an AWS EC2 application server and AWS RDS PostgreSQL database. The frontend, backend, ML models, and API services can operate through the same application environment, keeping deployment straightforward.
-
-The architecture can later be expanded with containerization, CI/CD pipelines, HTTPS, cloud monitoring, centralized logging, load balancing, role-based access control, object storage, real-time data feeds, and automated model updates. These extensions could improve scalability and make the system more suitable for larger datasets and multiple users.
-
-Expected Outcome
-
-The expected outcome is a functional cloud-hosted cybercrime intelligence platform where users can securely log in, select a region and year, request a forecast, and view the resulting risk assessment through an interactive dashboard.
-
-Overall, SATARK 2.0 demonstrates how Cloud Computing can provide the foundation for a secure cybercrime intelligence system, while machine learning supplies predictive capabilities. The project therefore brings together cloud infrastructure, cybersecurity, databases, APIs, visualization, and AI into one practical application, with the cloud serving as the central platform through which the entire system operates.
+1. **Automated Data Ingestion Pipelines**: Continuous ingestion of live cybercrime portal reports (NCRP) via scheduled AWS Lambda / EventBridge tasks.
+2. **Containerization & CI/CD**: Dockerized microservice architecture orchestrated via Amazon ECS / Fargate with GitHub Actions continuous deployment.
+3. **Choropleth Heatmap Animation**: Temporal playback showing predicted risk drift across Indian districts over multiple forecasting horizons.
+4. **Role-Based Access Control (RBAC)**: Fine-grained permissions separating law enforcement analysts, state administrators, and public viewers.

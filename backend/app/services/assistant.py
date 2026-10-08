@@ -71,18 +71,9 @@ class AIAssistantService:
         messages: List[Dict[str, str]],
         context: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-        # Always reload api key from environment if not yet initialized or changed
-        current_key = (os.getenv("GROQ_API_KEY") or "").strip()
-        if current_key and (not self.client or self.api_key != current_key):
-            self.api_key = current_key
-            try:
-                self.client = Groq(api_key=self.api_key)
-            except Exception as e:
-                logger.error(f"Failed to reinit Groq client: {e}")
-
-        if not self.api_key or not self.client:
+        if not self.client:
             return {
-                "reply": "Groq API Key is not configured. Please set the GROQ_API_KEY environment variable in your .env or cloud environment settings (AWS ECS/Elastic Beanstalk/Secrets Manager).",
+                "reply": "Groq API Key is not configured in .env. Please verify GROQ_API_KEY in your .env file.",
                 "model_used": "none",
                 "status": "error"
             }

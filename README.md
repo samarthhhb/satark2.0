@@ -105,7 +105,7 @@ satark-2.0/
 - Node.js 18+ and npm
 
 ### Quick Start (One Command)
-To start both the FastAPI backend (port `8000`) and the React frontend (port `5173`):
+When cloned, all core forecasting, machine learning models, nationwide database profiles, and the web portal run **directly out of the box** without requiring any external cloud setup:
 
 ```bash
 chmod +x start.sh
@@ -115,6 +115,12 @@ chmod +x start.sh
 - **Frontend Application**: `http://localhost:5173`
 - **Backend API**: `http://localhost:8000`
 - **Interactive API Documentation**: `http://localhost:8000/docs`
+
+> [!TIP]
+> **CyberGuard AI Assistant**: The ML forecasting engine and database work immediately with zero configuration. To also enable the natural language **CyberGuard AI Assistant**, add your free Groq API key in `backend/.env`:
+> ```env
+> GROQ_API_KEY=gsk_your_actual_groq_api_key_here
+> ```
 
 ### Manual Startup
 

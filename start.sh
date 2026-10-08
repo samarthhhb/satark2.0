@@ -15,7 +15,15 @@ echo "======================================================================"
 echo "                   SATARK 2.0 STARTUP CONTROLLER                      "
 echo "======================================================================"
 
-# 1. Check Python virtual environment
+# 1. Ensure backend .env exists
+if [ ! -f "$BACKEND_DIR/.env" ]; then
+    if [ -f "$BACKEND_DIR/.env.example" ]; then
+        echo "[*] Creating backend/.env from template (.env.example)..."
+        cp "$BACKEND_DIR/.env.example" "$BACKEND_DIR/.env"
+    fi
+fi
+
+# 2. Check Python virtual environment
 if [ ! -d "$BACKEND_DIR/venv" ]; then
     echo "[*] Initializing Python virtual environment in backend/venv..."
     python3 -m venv "$BACKEND_DIR/venv"
@@ -23,7 +31,7 @@ if [ ! -d "$BACKEND_DIR/venv" ]; then
     "$BACKEND_DIR/venv/bin/pip" install -r "$BACKEND_DIR/requirements.txt"
 fi
 
-# 2. Check Node modules in frontend
+# 3. Check Node modules in frontend
 if [ ! -d "$FRONTEND_DIR/node_modules" ]; then
     echo "[*] Installing frontend dependencies with npm..."
     (cd "$FRONTEND_DIR" && npm install)
