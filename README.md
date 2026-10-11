@@ -163,9 +163,10 @@ This script automatically configures **2GB Swap Memory Protection**, installs de
 ## About Us & Development Team
 
 Developed under the **Department of AI and Machine Learning, Symbiosis Institute of Technology (SIT), Pune**.
+As a group project
 
 ### Team Members
-1. **Samarth Buchake**
+1. **Samarth Buchake** - Main Contributor and Head of the Team
 2. **Rehaan Kasad**
 3. **Rashi Singh**
 4. **Shaikh Aakef**
