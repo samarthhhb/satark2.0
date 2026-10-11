@@ -3,6 +3,8 @@
 SATARK 2.0 is a web-based cybercrime forecasting and risk intelligence system designed to help analyze regional cybercrime patterns across India. Rather than only looking retrospectively at what has already occurred, the system uses historical district-level crime data to forecast the expected cybercrime burden in the upcoming year and classify regions into standardized risk categories (Low, Medium, or High).
 
 ---
+## Deployed using AWS Cloud - https://16.16.170.179.sslip.io/login
+---
 
 ## Overview
 
